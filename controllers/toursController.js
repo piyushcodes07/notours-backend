@@ -34,6 +34,17 @@ exports.getTour = (req, res) => {
       },
     });
   };
+
+  exports.checkPostCreateTour =(req,res,next)=>{
+    if(!req.body.name){
+      return res.json({
+       
+        status:"error",
+        message:"required fields not provided",
+      })
+    }
+    next()
+  }
   
   exports.createTour = (req, res) => {
     let newTour = req.body;

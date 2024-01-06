@@ -4,10 +4,10 @@ const router = express.Router()// creating a router instead of ( const app = exp
 
 const toursController = require('../controllers/toursController')
 
-router
+router 
 .route('/')
 .get(toursController.getAllTours)
-.post(toursController.createTour);
+.post(toursController.checkPostCreateTour,toursController.createTour);//chaining middleware
 
 router
   .route('/:id')
