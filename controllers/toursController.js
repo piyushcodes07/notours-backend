@@ -1,60 +1,51 @@
-const fs = require('fs');
 
-
-const tours = JSON.parse(
-    fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-  );
-
+const Tour = require('.././models/tourModel')
 
 exports.getAllTours = (req, res) => {
     res.json({
       status: 'success',
       data: {
-        tours: tours,
+        // tours: tours,
       },
     });
   };
 
 exports.getTour = (req, res) => {
-    let id = req.params.id * 1; //converts the string to number
-    if (id > tours.length) {
-      return res.status(404).json({ status: 'error', data: 'no tour found' });
-    }
+    // let id = req.params.id * 1; //converts the string to number
+    // if (id > tours.length) {
+    //   return res.status(404).json({ status: 'error', data: 'no tour found' });
+    // }
   
-    console.log(req.params);
+    // console.log(req.params);
     //req.params has all the dynamic route variables
     //optional params can be defined like this '/api/v1/tours/:id/:optional?'
   
-    const tour = tours.find((Element) => Element.id === id);
+    // const tour = tours.find((Element) => Element.id === id);
   
     res.json({
       status: 'success',
       data: {
-        tour,
+        // tour,
       },
     });
   };
 
-  exports.checkPostCreateTour =(req,res,next)=>{
-    if(!req.body.name){
-      return res.json({
-       
-        status:"error",
-        message:"required fields not provided",
+
+  
+  exports.createTour = async (req, res) => {
+    try {
+      const newTour = await Tour.create(req.body)
+      res.status(201).json({
+        status:"success",
+        message:newTour
+      })
+      
+    } catch (error) {
+      res.status(400).json({
+        status:"fail",
+        message:error
       })
     }
-    next()
-  }
-  
-  exports.createTour = (req, res) => {
-    let newTour = req.body;
-  
-    res.json({
-      status: 'success',
-      data: {
-        req: req.body,
-      },
-    });
   };
   
   exports.updateTour = (req, res) => {

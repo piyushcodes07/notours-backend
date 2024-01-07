@@ -7,7 +7,7 @@ const toursController = require('../controllers/toursController')
 router 
 .route('/')
 .get(toursController.getAllTours)
-.post(toursController.checkPostCreateTour,toursController.createTour);//chaining middleware
+.post(toursController.createTour);//chaining middleware
 
 router
   .route('/:id')
