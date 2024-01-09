@@ -2,12 +2,28 @@
 const Tour = require('.././models/tourModel')
 
 exports.getAllTours = async(req, res) => {
+    //BASIC FILTERING
+    const excludes = ["page","sort","limit","fields"]
+    let query = {...req.query}
+    console.log(query);
+     excludes.map(el=>{
+        delete query[el] 
+    })
+    console.log(query);
+    const stringQuery = JSON.stringify(req.query).replace(/\b(gte|lte|gt|lt)\b/g, match=>`$${match}`);
+    query = JSON.parse(stringQuery)
     
+
+    //ADVANCED FILTERING
   try {
-    const allTours = await Tour.find()
+
+    // const testQuery = { ratingsAverage: { '$gte': '1' } }
+    const allTours =  Tour.find(query)
+    const final = await allTours; //execute query
+
     res.status(200).json({
-      message:"sucess",
-      data:allTours
+      message:"sucess", 
+      data:final
     })  
   } catch (error) {
     res.status(404).json({
