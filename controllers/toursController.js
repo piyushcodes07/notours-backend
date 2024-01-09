@@ -2,6 +2,8 @@
 const Tour = require('.././models/tourModel')
 
 exports.getAllTours = async(req, res) => {
+
+
     //BASIC FILTERING
     const excludes = ["page","sort","limit","fields"]
     let query = {...req.query}
@@ -9,17 +11,28 @@ exports.getAllTours = async(req, res) => {
      excludes.map(el=>{
         delete query[el] 
     })
-    console.log(query);
-    const stringQuery = JSON.stringify(req.query).replace(/\b(gte|lte|gt|lt)\b/g, match=>`$${match}`);
+    console.log(query)
+     
+    //ADVANCED FILTERING
+
+    const stringQuery = JSON.stringify(query).replace(/\b(gte|lte|gt|lt)\b/g, match=>`$${match}`);
     query = JSON.parse(stringQuery)
+    console.log(query)
     
 
-    //ADVANCED FILTERING
+   
   try {
 
-    // const testQuery = { ratingsAverage: { '$gte': '1' } }
-    const allTours =  Tour.find(query)
-    const final = await allTours; //execute query
+    //INITIALIZED QUERY
+    let allTours =  Tour.find(query)
+    
+    //FIELD LIMITING 
+    if(req.query.fields){
+      //CHAINING SELECT METHOD TO QUERY OBJ
+      allTours.select(req.query.fields.split(',').join(" "));
+    }
+
+    const final = await allTours; //EXECUTE QUERY
 
     res.status(200).json({
       message:"sucess", 
