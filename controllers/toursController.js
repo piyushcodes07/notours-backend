@@ -25,12 +25,33 @@ exports.getAllTours = async(req, res) => {
 
     //INITIALIZED QUERY
     let allTours =  Tour.find(query)
+
     
     //FIELD LIMITING 
     if(req.query.fields){
       //CHAINING SELECT METHOD TO QUERY OBJ
       allTours.select(req.query.fields.split(',').join(" "));
     }
+
+    //PAGINATION
+
+    if(req.query.page || req.query.limit){
+
+      const page = req.query.page * 1 || 1
+      const limit = req.query.limit * 1 || 15
+      const skip  = (page-1) * limit
+
+      const totalTours = await Tour.countDocuments()
+
+      //CHECKING IF PAGE IN AVAILABE 
+      if(skip >= totalTours){
+        throw new Error("page not available")
+      }
+      allTours.skip(skip).limit(limit);
+
+
+    }
+
 
     const final = await allTours; //EXECUTE QUERY
 
