@@ -1,6 +1,14 @@
 
 const Tour = require('.././models/tourModel')
 
+// MIDDLEWARE FOR top-5-cheap route (this middleware modifies the req.query to set some default query params)
+exports.topFiveCheap = (req,res,next)=>{
+  
+  req.query.sort = "price ratingsAverage"
+  req.query.limit = '5'
+  next()
+}
+
 exports.getAllTours = async(req, res) => {
 
 
@@ -67,6 +75,7 @@ exports.getAllTours = async(req, res) => {
 
     res.status(200).json({
       message:"sucess", 
+      dataLength:final.length,
       data:final
     })  
   } catch (error) {
