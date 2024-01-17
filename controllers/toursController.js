@@ -11,22 +11,32 @@ exports.getAllTours = async(req, res) => {
      excludes.map(el=>{
         delete query[el] 
     })
-    console.log(query)
+    console.warn(query,"filtered")
      
     //ADVANCED FILTERING
 
     const stringQuery = JSON.stringify(query).replace(/\b(gte|lte|gt|lt)\b/g, match=>`$${match}`);
     query = JSON.parse(stringQuery)
-    console.log(query)
+    console.error(query,"line 20")
     
 
    
   try {
 
     //INITIALIZED QUERY
+    
     let allTours =  Tour.find(query)
 
+
+    // SORTING (accending or decending)
+    if(req.query.sort){
+
+      const sortQuery  = req.query.sort.split(',').join(" ") 
+      console.log(sortQuery);
+      allTours.sort(sortQuery);
+    }
     
+
     //FIELD LIMITING 
     if(req.query.fields){
       //CHAINING SELECT METHOD TO QUERY OBJ
@@ -44,7 +54,7 @@ exports.getAllTours = async(req, res) => {
       const totalTours = await Tour.countDocuments()
 
       //CHECKING IF PAGE IN AVAILABE 
-      if(skip >= totalTours){
+      if(skip >= totalTours){ 
         throw new Error("page not available")
       }
       allTours.skip(skip).limit(limit);
