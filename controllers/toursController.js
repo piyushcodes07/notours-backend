@@ -1,6 +1,14 @@
 
 const Tour = require('.././models/tourModel')
 
+
+class APIfeatures{
+  constructor(query,queryString){
+    this.query = query
+    this.queryString = queryString
+  }
+}
+
 // MIDDLEWARE FOR top-5-cheap route (this middleware modifies the req.query to set some default query params)
 exports.topFiveCheap = (req,res,next)=>{
   
@@ -15,7 +23,9 @@ exports.getAllTours = async(req, res) => {
     //BASIC FILTERING
     const excludes = ["page","sort","limit","fields"]
     let query = {...req.query}
-    console.log(query);
+    console.log(query,"req.query original");
+    console.log(JSON.stringify(query));
+
      excludes.map(el=>{
         delete query[el] 
     })
@@ -27,8 +37,6 @@ exports.getAllTours = async(req, res) => {
     query = JSON.parse(stringQuery)
     console.error(query,"line 20")
     
-
-   
   try {
 
     //INITIALIZED QUERY
@@ -49,6 +57,7 @@ exports.getAllTours = async(req, res) => {
     if(req.query.fields){
       //CHAINING SELECT METHOD TO QUERY OBJ
       allTours.select(req.query.fields.split(',').join(" "));
+      console.log(req.query.fields.split(',').join(" "));
     }
 
     //PAGINATION

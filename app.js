@@ -6,7 +6,6 @@ const morgan = require('morgan');
 // REQUIRING CONTROLLER
 const toursRouter = require('./routes/tourRoute')
 
-
 //MIDDLEWARES
 app.use(express.json());
 app.use(morgan('dev'));
