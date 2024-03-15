@@ -8,6 +8,7 @@ router
   .get(toursController.topFiveCheap, toursController.getAllTours);
 
 router
+
   .route('/')
   .get(toursController.getAllTours)
   .post(toursController.createTour); //chaining middleware

@@ -15,4 +15,3 @@ app.use('/api/v1/tours',toursRouter); // routers are used as middleware for the 
 
 
 module.exports = app
-
