@@ -153,3 +153,18 @@ exports.deleteTour = async (req, res) => {
     });
   }
 };
+
+exports.tourStats = async(req,res) =>{
+  try {
+
+    const stats = await Tour.aggregate([
+      {}
+    ])
+    
+  } catch (error) {
+    res.json({
+      status: 'fail',
+      message: error,
+    })
+  }
+}
